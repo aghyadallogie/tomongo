@@ -1,4 +1,4 @@
-import connectMongoDB from "@/libs/mongodb";
+import connectMongoDB from "@/lib/mongodb";
 import Todo from "@/models/TodoModel";
 import { NextRequest, NextResponse } from "next/server";
 
