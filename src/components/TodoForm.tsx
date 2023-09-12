@@ -85,7 +85,7 @@ export function TodoForm() {
         />
         <div className="flex justify-between">
           <Button type="submit">Submit</Button>
-          <Button>
+          <Button variant={"outline"}>
             <Link href={"/todos"}>See List</Link>
           </Button>
         </div>
