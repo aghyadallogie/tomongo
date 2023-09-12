@@ -15,37 +15,28 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
 
 const formSchema = z.object({
-  title: z.string().min(2, {
-    message: "title must be at least 2 characters.",
+  email: z.string().email().min(8, {
+    message: "email must be at least 8 characters.",
   }),
-  description: z.string().min(6, {
-    message: "description must be at least 6 characters.",
+  password: z.string().min(8, {
+    message: "password must be at least 8 characters.",
   }),
 });
 
 export function TodoForm() {
-  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      description: "",
+      email: "",
+      password: "",
     },
   });
 
   function onSubmit() {
-    const { title, description } = form.getValues();
-
-    fetch("http://localhost:3000/api/todos", {
-      body: JSON.stringify({ title, description }),
-      method: "post",
-    });
-
-    router.push("/todos");
+    const { email, password } = form.getValues();
+    console.log(email, password);
   }
 
   return (
@@ -53,13 +44,12 @@ export function TodoForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="title"
+          name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
-
+              <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="" {...field} />
+                <Input type="email" placeholder="" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -68,12 +58,12 @@ export function TodoForm() {
 
         <FormField
           control={form.control}
-          name="description"
+          name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input placeholder="" {...field} />
+                <Input type="password" placeholder="" {...field} />
               </FormControl>
               <FormDescription>
                 This is your public display name.
@@ -82,12 +72,7 @@ export function TodoForm() {
             </FormItem>
           )}
         />
-        <div className="flex justify-between">
-          <Button type="submit">Submit</Button>
-          <Button>
-            <Link href={"/todos"}>See List</Link>
-          </Button>
-        </div>
+        <Button type="submit">Submit</Button>
       </form>
     </Form>
   );
