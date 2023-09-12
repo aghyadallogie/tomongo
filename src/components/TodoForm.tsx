@@ -46,6 +46,7 @@ export function TodoForm() {
     });
 
     router.push("/todos");
+    router.refresh();
   }
 
   return (
