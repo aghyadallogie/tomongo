@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { signOut, useSession } from "next-auth/react";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -29,6 +30,8 @@ const formSchema = z.object({
 
 export function TodoForm() {
   const router = useRouter();
+  const { data, status } = useSession();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -49,9 +52,22 @@ export function TodoForm() {
     router.refresh();
   }
 
+  console.log({data});
+  
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <div className="flex justify-between">
+          {status === "authenticated" ? (
+            <button onClick={() => signOut()}>logout</button>
+          ) : (
+            <>
+              <Link href="/login">login</Link>
+              <Link href="/register">register</Link>
+            </>
+          )}
+        </div>
         <FormField
           control={form.control}
           name="title"

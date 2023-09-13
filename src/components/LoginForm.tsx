@@ -1,8 +1,5 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -14,7 +11,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import * as z from "zod";
 
 const formSchema = z.object({
   email: z.string().email().min(8, {
@@ -25,7 +26,8 @@ const formSchema = z.object({
   }),
 });
 
-export function TodoForm() {
+export default function LoginForm() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,9 +36,20 @@ export function TodoForm() {
     },
   });
 
-  function onSubmit() {
+  async function onSubmit() {
     const { email, password } = form.getValues();
-    console.log(email, password);
+
+    const res = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+      // callbackUrl: `${window.location.origin}`,
+    });
+
+    if (res?.error) console.log(res?.error);
+
+    console.log("ressss", res);
+    router.replace("/todos");
   }
 
   return (
