@@ -14,10 +14,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -30,7 +29,6 @@ const formSchema = z.object({
 
 export function TodoForm() {
   const router = useRouter();
-  const { data, status } = useSession();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -52,29 +50,16 @@ export function TodoForm() {
     router.refresh();
   }
 
-  console.log({data});
-  
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <div className="flex justify-between">
-          {status === "authenticated" ? (
-            <button onClick={() => signOut()}>logout</button>
-          ) : (
-            <>
-              <Link href="/login">login</Link>
-              <Link href="/register">register</Link>
-            </>
-          )}
-        </div>
+        <div className="flex justify-between"></div>
         <FormField
           control={form.control}
           name="title"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Title</FormLabel>
-
               <FormControl>
                 <Input placeholder="" {...field} />
               </FormControl>
@@ -100,10 +85,7 @@ export function TodoForm() {
           )}
         />
         <div className="flex justify-between">
-          <Button type="submit">Submit</Button>
-          <Button variant={"outline"}>
-            <Link href={"/todos"}>See List</Link>
-          </Button>
+          <Button className="bg-slate-700" type="submit">Create</Button>
         </div>
       </form>
     </Form>

@@ -47,8 +47,6 @@ export default function LoginForm() {
     });
 
     if (res?.error) console.log(res?.error);
-
-    console.log("ressss", res);
     router.replace("/todos");
   }
 
@@ -78,14 +76,13 @@ export default function LoginForm() {
               <FormControl>
                 <Input type="password" placeholder="" {...field} />
               </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit" className="bg-slate-700">
+          Login
+        </Button>
       </form>
     </Form>
   );

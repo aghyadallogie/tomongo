@@ -1,3 +1,5 @@
+import { nextauthOptions } from "@/lib/nextauthOptions";
+import { getServerSession } from "next-auth";
 import Link from "next/link";
 
 export interface ITodoItem {
@@ -11,14 +13,13 @@ export default async function TodosList() {
     await fetch("http://localhost:3000/api/todos", { cache: "no-store" })
   ).json();
 
+  const session = await getServerSession(nextauthOptions)
+
+  // console.log('sessh', session);
+  
+
   return (
     <main className="flex min-h-screen flex-col items-center p-12 lg:p-24 max-w-2xl m-auto">
-      <Link
-        href={"/"}
-        className="flex self-end text-sm text-slate-400 font-light underline mb-4"
-      >
-        create
-      </Link>
       {todoItems?.map((item: ITodoItem) => (
         <Link
           href={`http://localhost:3000/todos/${item._id}`}
